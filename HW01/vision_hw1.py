@@ -6,7 +6,7 @@ import numpy as np
 # Note: If you didn't launch Python from the same directory where you saved
 #       the file, chipmunk.png, you'll need to provide the full path name as
 #       the argument to Image.open
-im = Image.open('chipmunk.png')
+im = Image.open('HW01/chipmunk.png')
 
 # display relevant Image class attributes: dimensions (width, height),
 # pixel format and file format
