@@ -1,16 +1,17 @@
 # import the packages we need for this assignment
-from PIL import Image
+from PIL import Image # pip3 install pillow
 import numpy as np
 
 # open the test image
 # Note: If you didn't launch Python from the same directory where you saved
 #       the file, chipmunk.png, you'll need to provide the full path name as
 #       the argument to Image.open
-im = Image.open('HW01/chipmunk.png')
+im = Image.open('HW01/chipmunk.png') # location 변경
 
 # display relevant Image class attributes: dimensions (width, height),
 # pixel format and file format
 print (im.size, im.mode, im.format)
+# (750, 599) RGB JPEG
 
 # Note: PIL does not have a built-in image display tool.  Instead, principally
 # for debugging, there's a show method which saves an image to a temporary file
@@ -27,6 +28,7 @@ im.show()
 #plt.show()
 
 # convert the image to a black and white "luminance" greyscale image
+# 휘도 greyscale image
 im = im.convert('L')
 
 # select a 100x100 sub region (containing the chipmunk's head)
@@ -62,9 +64,11 @@ im4_array = im2_array.copy()
 # this time, reduce the intensity of each pixel by half
 # Note: this converts the array to a float array
 im4_array = im4_array * 0.5
+print(im4_array.dtype) # float64
 
 # convert the array back to a unit8 array so we can write to a file
 im4_array = im4_array.astype('uint8')
+print(im4_array.dtype) # uint8
 
 # convert the numpy array back to a PIL image and save
 im4 = Image.fromarray(im4_array)
@@ -75,7 +79,7 @@ im4.save('chipmunk_head_dark.png','PNG')
 grad = np.arange(0,256)
 
 # repeat this 1-D array 256 times to create a 256x256 2-D array
-grad = np.tile(grad,[256,1])
+grad = np.tile(grad,[256,1]) # 256개의 행과 grad의 열(256) * 1만큼 만들기
 
 # convert to uint8 and then to a PIL image and save
 im5 = Image.fromarray(grad.astype('uint8'))
