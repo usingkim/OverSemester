@@ -1,5 +1,9 @@
 # 2주차 실험
 
+./LAB02_examples : ppt에 있는 예시 코드들 모음
+./LAB02_ALL : Android Studio에서 코딩할때 사용한 폴더
+./LAB02_codes : 
+
 Kotlin 컴파일 및 실행 방법 참고 https://curryyou.tistory.com/423
 
 LAB02-01 : 기초 따라하기 : 클래스를 담고 있는 배열 필터

@@ -13,6 +13,10 @@ fun main()
 {
     println("====== 배열 ======")
 
+    // 배열 : 크기가 고정된 것 표현을 위함 Array
+    // List : MutableList 가 수정 가능함 => add 가능
+    // Array나 그냥 List는 add 불가능(수정 불가능하므로)
+
     var list1: Array<Int> = arrayOf(1, 2, 3, 4, 5, 6, 7, 8)
     var list2: List<Int> = listOf(1, 2, 3, 4, 5, 6, 7, 8)
     var list3: MutableList = mutableListOf(1, 2, 3, 4, 5, 6, 7, 8)

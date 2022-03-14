@@ -7,7 +7,7 @@ fun main()
 {
     var number1: Int = 10
     var number2: Int = 10 // 변경이 가능하다
-    val number3: Int = 10
+    val number3: Int = 10 // 변경이 불가능하다
 
     number1 = 20
     number2 = 20
