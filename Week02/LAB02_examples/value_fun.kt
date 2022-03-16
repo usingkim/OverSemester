@@ -1,3 +1,5 @@
+
+// var 이거 안해도 된당
 fun plus_number(number: Int, number2: Int): String{
     var sum = (number1 + number2).toString()
     return "number1과 number2를 더하면? : " + sum

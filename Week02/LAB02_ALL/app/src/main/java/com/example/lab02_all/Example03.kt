@@ -1,9 +1,11 @@
 package com.example.lab02_all
 
 fun Year(number: Int): Int{
+
+    // else if 잘 이용하자 !!
     if (number % 400 == 0) return 1
-    if (number % 100 == 0 && number % 400 != 0) return 0
-    if (number % 4 == 0) return 1
+    else if (number % 100 == 0) return 0
+    else if (number % 4 == 0) return 1
 
     return 0
 }

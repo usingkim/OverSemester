@@ -6,44 +6,51 @@ enum class grades{
 }
 
 class MyAccount {
-    var name: String = ""
-    var money: Int = 0
-    var grade = grades.valueOf("C")
-    var sc: Scanner = Scanner(System.`in`)
-    var freezing: Boolean = false
+
+    var name: String = ""                   // 사용자 이름
+    var money: Int = 0                      // 사용자 계좌 잔액
+    var grade = grades.valueOf("C")   // 신용 등급
+    var sc: Scanner = Scanner(System.`in`)  // 입출력 위함
+    var isFreezing: Boolean = false         // 계좌 동결 여부
 
     private fun Deposite() {
+        // 입금 함수
         println("입금하실 금액을 말하세요.")
         var m: Int = sc.nextInt()
 
         money += m
 
-        if(freezing==true && money >= 0){
+        if(isFreezing && money >= 0){
             println("동결계좌가 열렸습니다.")
-            freezing=false
+            isFreezing = false
         }
 
         if (money >= 0) upGrade()
+
         println(m.toString() + " 원을 입금하였습니다. 잔액 : " + money.toString())
     }
 
     private fun Withdraw() {
-        if (freezing) {
+        if (isFreezing) {
             println("동결된 계좌에서 출금하실 수 없습니다.")
             return
         }
+
         println("출금하실 금액을 말하세요.")
         var m: Int = sc.nextInt()
         money -= m
 
-        if(grade == grades.F){
-            downGrade()
-            println("계좌가 마이너스 되었습니다.")
-            return
+        if(money < -1000) {
+            println("잔액이 부족합니다.")
+            money += m // 출금 안됨. alert만
         }
+        else if(money < 0){
 
-        if(money < -1000) println("잔액이 부족합니다.")
-        if(money <= 0){
+            if (grade == grades.F){
+                println("최저 등급의 신용을 가지고 있습니다.")
+                println("계좌가 동결됩니다.")
+            }
+
             println("계좌가 마이너스 되었습니다.")
             downGrade()
             println("$m 원을 출금하였습니다. 잔액 : $money")
@@ -61,9 +68,7 @@ class MyAccount {
             in "D" -> grade = grades.E
             in "E" -> grade = grades.F
             in "F" -> {
-                println("최저 등급의 신용을 가지고 있습니다.")
-                println("계좌가 동결됩니다.")
-                freezing = true
+                isFreezing = true
                 return
             }
         }
@@ -101,7 +106,7 @@ class MyAccount {
             in "I" -> Information()
             in "D" -> Deposite()
             in "W" -> Withdraw()
-            //in "E" ->
+            in "E" -> System.exit(0)
         }
     }
 
