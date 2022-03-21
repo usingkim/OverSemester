@@ -19,13 +19,16 @@ def boxfilter(n):
 def gauss1d(sigma):
     # length : sigma * 6, and then rounded up to the next odd integer
     length = math.ceil(sigma * 6) // 2 * 2 + 1
-    # filter generate
-    filter = np.arange(length // 2 * (-1), length // 2 + 1)
+    # generate 1D array of x values
+    x = np.arange(length // 2 * (-1), length // 2 + 1)
     # x is the ditance of an array value from the center
-    center = filter[length // 2]
-    x = np.abs(np.subtract(filter, center))
+    center = x[length // 2]
+    x = np.abs(np.subtract(x, center))
     # apply function
-    filter = np.exp(x ** 2 * -1 / (2 * sigma ** 2))
+    filter = np.exp(x ** 2 * -1 / (2 * (sigma ** 2)))
+    # normalize the values in the filter : sum to 1
+    sum_of_filter = np.sum(filter)
+    filter = np.divide(filter, sum_of_filter)
     return filter
 
 # for i in [0.3, 0.5, 1, 2]:
@@ -46,13 +49,26 @@ def gauss2d(sigma):
 
 # 4.
 # 4-a. zero paddings
+# Write a function ‘convolve2d(array, filter)’ that takes in an image (stored in `array`) and a filter, 
+# and performs convolution to the image with zero paddings (thus, the image sizes of input and output are the same).
 def convolve2d(array, filter):
     # f x f kernel, m = (f-1)/2 : m space < fill with zeros
     f = len(filter)
     m = (f-1) // 2
     # add zero padding
     array_padding = np.pad(array, ((m, m), (m, m)), 'constant', constant_values=0)
-    return array_padding
+    # for convolution : up, down, left and right changes
+    for_convolution = np.flip(filter)
+    print(for_convolution.shape)
+    # array : numpy array, so no len() => asarray => array
+    array_numpy = np.asarray(array)
+    row, col = len(array_numpy), len(array_numpy[0])
+    image = np.zeros((row, col), dtype=np.float32)
+    # performs convolution to the image with zero paddings
+    for i in range(row):
+        for j in range(col):
+            image[i][j] = np.sum(array_padding[i:i+len(filter), j:j+len(filter)] * for_convolution)
+    return image
 
 # array = np.array(
 #     ([1, 0, 0, 0, 1],
