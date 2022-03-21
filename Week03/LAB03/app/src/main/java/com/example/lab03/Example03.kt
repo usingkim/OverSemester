@@ -8,10 +8,7 @@ class Wine(var name: String, var wineType: WineType, var cost: Int)
 
 fun Beer.print(){println("맥주이름 : $name , 맥주타입 : $beerType, 맥주가격 : $cost")}
 fun Beer.change_price(price: Int){cost = price}
-fun Wine.euro_to_won(operation: (Int, Int)->Int){
-    var result = operation(1350, cost)
-    println("유로 : $cost , 원화 : $result")
-}
+fun Wine.euro_to_won(operation: (Int, Int)->Int){ println("유로 : $cost , 원화 : ${operation(1350, cost)}") }
 
 fun main(){
     var beer1 = Beer("Hite", BeerType.FRUIT, 200)

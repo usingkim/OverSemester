@@ -1,10 +1,8 @@
 package com.example.lab03
 
 fun isLowerCase(c: Char): Boolean{
-    if (c.toInt() < 97) return false
-    if (c.toInt() > 122) return false
-
-    return true
+    if (c.toInt() < 97 || c.toInt() > 122) return false
+    else return true
 }
 
 fun change(str: String): String{
