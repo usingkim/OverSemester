@@ -88,13 +88,13 @@ def gaussconvolve2d(array, sigma):
     return padding
 
 
-## Part 2
+# Part 2 Hybrid Images
 
 # 1. Low Frequency Image
-def gaussRGB(image, sigma):
+def gauss(image, sigma):
     # rgb seperately
     image = Image.Image.split(image)
-    # for calculate : Image -> array
+    # for calculation : Image -> array
     image_array = [np.asarray(rgb, dtype=np.float32) for rgb in image]
     # apply filter
     image_array = [gaussconvolve2d(rgb, sigma) for rgb in image_array]
@@ -104,14 +104,15 @@ def gaussRGB(image, sigma):
     image = Image.merge("RGB", image)
     return image
 
-def SharpenRGB(image, sigma):
+# 2. High Frequency Image
+def sharpen(image, sigma):
     # rgb seperately
     image = Image.Image.split(image)
-    # for calculate : Image -> array
+    # for calculation : Image -> array
     image_array = [np.asarray(rgb, dtype=np.float32) for rgb in image]
     # apply filter
     filtered_image_array = [gaussconvolve2d(rgb, sigma) for rgb in image_array]
-    #
+    # image = image - low + 128(for visualized)
     result_image_array = [image_array[i] - filtered_image_array[i] for i in range(len(image_array))]
     result_image_array = np.add(result_image_array, 128)
     # for PIL
@@ -120,26 +121,45 @@ def SharpenRGB(image, sigma):
     image = Image.merge("RGB", image)
     return image
 
-# 3. add low and high frequency images
+# 3. add low and high frequency images => hybrid image
 def hybrid(image1, image2, sigma):
-    low = gaussRGB(image1, sigma)
-    high = SharpenRGB(image2, sigma)
-
+    low = gauss(image1, sigma)
+    high = sharpen(image2, sigma)
+    # Image to array for calculation
     low_array = np.asarray(low)
     high_array = np.asarray(high)
-
+    # in sharpen function => +128 for visualization. 
+    # just visualization => the value is no longer necessary -128
     result = low_array + high_array - 128
-    print(np.max(result), np.min(result))
-
+    result[result > 255] = 255
+    result[result < 0] = 0
+    # array -> Image
     result = Image.fromarray(result)
-
-    result.show()
+    return result
 
 def fun():
-    image1 = Image.open("[HW02] Image Filtering/hw2_image/0b_marilyn.bmp")
-    image2 = Image.open("[HW02] Image Filtering/hw2_image/0a_einstein.bmp")
-    sigma = 3
-    hybrid(image1, image2, sigma)
+    image1 = Image.open("[HW02] Image Filtering/hw2_image/3a_eiffel.bmp")
+    image2 = Image.open("[HW02] Image Filtering/hw2_image/3b_tower.bmp")
+
+    # image1 = Image.open("[HW02] Image Filtering/hw2_image/0a_einstein.bmp")
+    # image2 = Image.open("[HW02] Image Filtering/hw2_image/0b_marilyn.bmp")
+
+    sigma = 7
+
+    # low_image1 = gauss(image1, sigma)
+    # low_image2 = gauss(image2, sigma)
+
+    # low_image1.save('[HW02] Image Filtering/hw2_image/low_eiffel.bmp')
+    # low_image2.save("[HW02] Image Filtering/hw2_image/low_tower.bmp")
+
+    # high_image1 = sharpen(image1, sigma)
+    # high_image2 = sharpen(image2, sigma)
+
+    # high_image1.save('[HW02] Image Filtering/hw2_image/high_eiffel.bmp')
+    # high_image2.save("[HW02] Image Filtering/hw2_image/high_tower.bmp")
+
+    hybrid_image = hybrid(image1, image2, sigma)
+    hybrid_image.save("[HW02] Image Filtering/hw2_image/hybrid.bmp")
 
 fun()
 
