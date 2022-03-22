@@ -12,27 +12,20 @@ def boxfilter(n):
     filter = np.full((n, n), 1 / (n**2))
     return filter
 
-# for i in [3, 7, 4]:
-#     print(boxfilter(i))
-
 # 2. 1D Gaussian filter
 def gauss1d(sigma):
     # length : sigma * 6, and then rounded up to the next odd integer
     length = math.ceil(sigma * 6) // 2 * 2 + 1
     # generate 1D array of x values
     x = np.arange(length // 2 * (-1), length // 2 + 1)
-    # x is the ditance of an array value from the center
-    center = x[length // 2]
-    x = np.abs(np.subtract(x, center))
+    # x is the ditance of an array value from the center, center is 0
+    x = np.abs(np.subtract(x, 0))
     # apply function
     filter = np.exp(x ** 2 * -1 / (2 * (sigma ** 2)))
     # normalize the values in the filter : sum to 1
     sum_of_filter = np.sum(filter)
     filter = np.divide(filter, sum_of_filter)
     return filter
-
-# for i in [0.3, 0.5, 1, 2]:
-#     print(gauss1d(i))
 
 # 3. 2D Gaussian filter
 def gauss2d(sigma):
@@ -44,13 +37,8 @@ def gauss2d(sigma):
     filter = np.divide(filter, sum_of_filter)
     return filter
 
-# for i in [0.5, 1]:
-#     print(gauss2d(i))
-
 # 4.
 # 4-a. zero paddings
-# Write a function ‘convolve2d(array, filter)’ that takes in an image (stored in `array`) and a filter, 
-# and performs convolution to the image with zero paddings (thus, the image sizes of input and output are the same).
 def convolve2d(array, filter):
     # f x f kernel, m = (f-1)/2 : m space < fill with zeros
     f = len(filter)
@@ -59,30 +47,17 @@ def convolve2d(array, filter):
     array_padding = np.pad(array, ((m, m), (m, m)), 'constant', constant_values=0)
     # for convolution : up, down, left and right changes
     for_convolution = np.flip(filter)
-    print(for_convolution.shape)
     # array : numpy array, so no len() => asarray => array
     array_numpy = np.asarray(array)
+    # for result : len
     row, col = len(array_numpy), len(array_numpy[0])
+    # result => save to 'image' numpy array variable.
     image = np.zeros((row, col), dtype=np.float32)
     # performs convolution to the image with zero paddings
     for i in range(row):
         for j in range(col):
             image[i][j] = np.sum(array_padding[i:i+len(filter), j:j+len(filter)] * for_convolution)
     return image
-
-# array = np.array(
-#     ([1, 0, 0, 0, 1],
-#     [2, 3, 0, 8, 0],
-#     [2, 0, 0, 0, 3],
-#     [0, 0, 1, 0, 0])
-# )
-# filter = np.array(
-#     ([0, 0, 0],
-#     [0, 0, 0],
-#     [0, 0, 0])
-# )
-
-# print(convolve2d(array, filter))
 
 # 4-b. Gaussian convolution to a 2D array
 def gaussconvolve2d(array, sigma):
@@ -97,8 +72,12 @@ def gaussconvolve2d(array, sigma):
 dog = Image.open('[HW02] Image Filtering/hw2_image/2b_dog.bmp')
 # Convert it to a greyscale
 grey_dog = dog.convert('L')
-grey_dog = gaussconvolve2d(grey_dog, 3)
-grey_dog = Image.fromarray(grey_dog)
+# for calculate : numpy -> array, input variable type : np.float32
+grey_dog_array = np.asarray(grey_dog, dtype=np.float32)
+# apply filter
+grey_dog_array = gaussconvolve2d(grey_dog_array, 3)
+# for PIL show
+grey_dog = Image.fromarray(grey_dog_array)
 
 # 4-d. Use PIL to show both the original and filtered images.
 dog.show()
