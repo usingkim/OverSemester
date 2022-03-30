@@ -7,6 +7,12 @@
 #include "proc.h"
 #include "spinlock.h"
 
+extern int Rcount;
+
+int readcount(void){
+  return Rcount;
+}
+
 struct {
   struct spinlock lock;
   struct proc proc[NPROC];

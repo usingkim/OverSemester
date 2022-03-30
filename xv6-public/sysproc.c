@@ -7,6 +7,12 @@
 #include "mmu.h"
 #include "proc.h"
 
+int 
+sys_readcount(void)
+{
+  return readcount();
+}
+
 int
 sys_fork(void)
 {
