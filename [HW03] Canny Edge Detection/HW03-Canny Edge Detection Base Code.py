@@ -55,6 +55,11 @@ def gaussconvolve2d(array,sigma):
     padding = convolve2d(array, filter)
     return padding
 
+
+################################
+############# HW03 #############
+################################
+
 def sobel_filters(img):
     """ Returns gradient magnitude and direction of input img.
     Args:
