@@ -131,8 +131,11 @@ def hybrid(image1, image2, sigma):
     # in sharpen function => +128 for visualization. 
     # just visualization => the value is no longer necessary -128
     result = low_array + high_array - 128
-    result[result > 255] = 255
-    result[result < 0] = 0
+    print(np.max(result), np.min(result))
+    np.where(result > 255, 255, result)
+    np.where(result < 0, 0, result)
+    #result[result > 255] = 255
+    #result[result < 0] = 0
     # array -> Image
     result = Image.fromarray(result)
     return result
@@ -144,7 +147,7 @@ def fun():
     # image1 = Image.open("[HW02] Image Filtering/hw2_image/0a_einstein.bmp")
     # image2 = Image.open("[HW02] Image Filtering/hw2_image/0b_marilyn.bmp")
 
-    sigma = 7
+    sigma = 3
 
     # low_image1 = gauss(image1, sigma)
     # low_image2 = gauss(image2, sigma)
@@ -158,7 +161,7 @@ def fun():
     # high_image1.save('[HW02] Image Filtering/hw2_image/high_eiffel.bmp')
     # high_image2.save("[HW02] Image Filtering/hw2_image/high_tower.bmp")
 
-    hybrid_image = hybrid(image1, image2, sigma)
+    hybrid_image = hybrid(image2, image1, sigma)
     hybrid_image.save("[HW02] Image Filtering/hw2_image/hybrid.bmp")
 
 fun()
