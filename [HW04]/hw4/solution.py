@@ -1,3 +1,5 @@
+from hashlib import shake_128
+from turtle import dot
 import numpy as np
 import math
 import random
@@ -29,12 +31,42 @@ def RANSACFilter(
     assert isinstance(orient_agreement, float)
     assert isinstance(scale_agreement, float)
     ## START
+    largest_set = []
 
+    for _ in range(1):
+        # random하게 keypoints1과 keypoints2에서 뽑아낸다.
+        random_k1 = keypoints1[random.randint(0, keypoints1.shape[0])]
+        random_k2 = keypoints2[random.randint(0, keypoints2.shape[0])]
 
+        # 두개의 orientation 값을 기준으로, inlier의 기준이 되는 orientation 값을 설정한다.
+        # orientation = 두 값 차이에 threshold를 더하고 빼준 값이다.
+        orientation = math.degrees(random_k1[3])- math.degrees(random_k2[3])
+        orientation = [orientation-orient_agreement, orientation+orient_agreement]
+
+        # 두개의 scale 값을 기준으로, inlier의 기준이 되는 scale 값을 설정한다.
+        # scale = (s2/s1)에 (s2/s1)*scale_agreement 값을 더하고 빼준 값이다.
+        scale = random_k2[2] / random_k1[2]
+        scale = [scale * (1 - scale_agreement), scale * (1 + scale_agreement)]
+
+        inliers = list()
+
+        print(orientation, scale)
+
+        for i1, k1 in enumerate(keypoints1):
+            for i2, k2 in enumerate(keypoints2):
+                o = math.degrees(k1[3])- math.degrees(k2[3])
+                s = k2[2] / k1[2]
+
+                if orientation[0] < o < orientation[1] and scale[0] < s < scale[1]:
+                    #print(math.degrees(random_k1[3]), math.degrees(random_k2[3]), orientation, o)
+                    inliers.append([i1, i2])
+
+        if len(inliers) > len(largest_set):
+            largest_set = inliers[:]
+        #print(len(largest_set))
     ## END
     assert isinstance(largest_set, list)
     return largest_set
-
 
 
 def FindBestMatches(descriptors1, descriptors2, threshold):
@@ -56,9 +88,37 @@ def FindBestMatches(descriptors1, descriptors2, threshold):
     assert isinstance(descriptors2, np.ndarray)
     assert isinstance(threshold, float)
     ## START
-    ## the following is just a placeholder to show you the output format
-    num = 5
-    matched_pairs = [[i, i] for i in range(num)]
+
+    matched_pairs = []
+    
+    # d1과 d2이 같은 feature인지 확인하는 방법은, angle을 기준으로 한다.
+    # d1 pixel의 vector와 d2 pixel의 vector를 비교한다.
+    # 계산된 값이 작을수록 유사하다고 할 수 있다.
+    for idx1, d1 in enumerate(descriptors1):
+        results = []
+        for idx2, d2 in enumerate(descriptors2):
+            # a (내적) b = |a| * |b| * cos(theta)
+            # matrix_dot = a (내적) b
+            matrix_dot = np.dot(d1, d2)
+            
+            # cos(theta) = matrix_dot / |a| / |b|
+            cos_theta = matrix_dot / np.linalg.norm(d1) / np.linalg.norm(d2)
+
+            # theta = cos^(-1)(cos_theta)
+            theta = math.acos(cos_theta)
+
+            # results에 계산한 값 잠시 저장해둔다.
+            results.append([idx1, idx2, theta])
+
+        # 위에서 계산한 값을 기준으로 sorting을 한다.
+        results = sorted(results, key=lambda x: x[2])
+
+        # dist[best_idx]/dist[second_idx] <= threshold
+        if results[0][2] / results[1][2] <= threshold:
+            # results에는 idx1, idx2, theta로 저장되어있다. 
+            # theta를 제외하고 앞에 두 값만 matched_pairs list에 저장해야하므로, [0:2]로 slicing을 해준다.
+            matched_pairs.append(results[0][0:2])
+
     ## END
     return matched_pairs
 
