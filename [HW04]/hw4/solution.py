@@ -33,14 +33,24 @@ def RANSACFilter(
     ## START
     largest_set = []
 
-    for _ in range(1):
-        # random하게 keypoints1과 keypoints2에서 뽑아낸다.
-        random_k1 = keypoints1[random.randint(0, keypoints1.shape[0])]
-        random_k2 = keypoints2[random.randint(0, keypoints2.shape[0])]
+    # 10회 반복
+    for _ in range(10):
+        # random하게 matched_pairs에서 뽑아낸다.
+        # 0 ~ len(matched_pairs) - 1 중 숫자 하나를 리턴해준다.
+        rand = random.randint(0, len(matched_pairs) - 1)
+        # matched_pairs[rand]를 통해 [i, j]를 random_idx에 저장한다.
+        random_idx = matched_pairs[rand]
+
+        # matched_pairs에는 [i,j]의 형태로 저장되어있다.
+        # 이를 k1과 k2에 적용해서 value를 가져온다.
+        random_k1 = keypoints1[random_idx[0]]
+        random_k2 = keypoints2[random_idx[1]]
 
         # 두개의 orientation 값을 기준으로, inlier의 기준이 되는 orientation 값을 설정한다.
         # orientation = 두 값 차이에 threshold를 더하고 빼준 값이다.
+        # orientation : 중앙값
         orientation = math.degrees(random_k1[3])- math.degrees(random_k2[3])
+        # orientation : 중앙 값을 기준으로 threshold를 이용해 range 설정
         orientation = [orientation-orient_agreement, orientation+orient_agreement]
 
         # 두개의 scale 값을 기준으로, inlier의 기준이 되는 scale 값을 설정한다.
@@ -48,22 +58,26 @@ def RANSACFilter(
         scale = random_k2[2] / random_k1[2]
         scale = [scale * (1 - scale_agreement), scale * (1 + scale_agreement)]
 
+        # inlier들을 임시로 저장해주는 리스트를 생성한다.
         inliers = list()
 
-        print(orientation, scale)
+        for m in matched_pairs:
+            # matched_pairs에는 [i, j]들로 구성되어있다.
+            k1 = keypoints1[m[0]]
+            k2 = keypoints2[m[1]]
 
-        for i1, k1 in enumerate(keypoints1):
-            for i2, k2 in enumerate(keypoints2):
-                o = math.degrees(k1[3])- math.degrees(k2[3])
-                s = k2[2] / k1[2]
+            # inlier를 판별하기 위해 orientation과 scale을 구한다.
+            o = math.degrees(k1[3])- math.degrees(k2[3])
+            s = k2[2] / k1[2]
 
-                if orientation[0] < o < orientation[1] and scale[0] < s < scale[1]:
-                    #print(math.degrees(random_k1[3]), math.degrees(random_k2[3]), orientation, o)
-                    inliers.append([i1, i2])
+            # for문 외부에서 구해둔 orientation과 scale을 통해 inlier인지 아닌지 비교한다.
+            if orientation[0] < o < orientation[1] and scale[0] < s < scale[1]:
+                inliers.append(m)
 
+        # 가장 원소의 숫자가 많은 list를 return해줘한다.
         if len(inliers) > len(largest_set):
             largest_set = inliers[:]
-        #print(len(largest_set))
+
     ## END
     assert isinstance(largest_set, list)
     return largest_set
