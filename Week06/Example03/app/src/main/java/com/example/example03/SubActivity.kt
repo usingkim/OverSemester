@@ -1,8 +1,11 @@
 package com.example.example03
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class SubActivity : AppCompatActivity(){
@@ -20,9 +23,21 @@ class SubActivity : AppCompatActivity(){
         tv_address.text = intent.getStringExtra("address")
         tv_etc.text = intent.getStringExtra("etc")
 
-        var btn: Button = findViewById(R.id.btn_sub)
+        var btn: Button = findViewById(R.id.btn_confirm)
         btn.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            setResult(11, intent)
+            Toast.makeText(this.getApplicationContext(),"저장되었습니다.", Toast.LENGTH_SHORT).show()
             finish()
         }
+
+        var btn2: Button = findViewById(R.id.btn_revise)
+        btn2.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            setResult(12, intent)
+            finish()
+        }
+
+
     }
 }

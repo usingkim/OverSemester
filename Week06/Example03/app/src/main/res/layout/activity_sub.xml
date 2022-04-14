@@ -49,11 +49,34 @@
         android:textSize="20dp"
         android:textStyle="bold"/>
 
-    <Button
-        android:id="@+id/btn_sub"
+    <ImageView
+        android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="확인"
-        android:textSize="20dp"
-        android:textStyle="bold" />
+        android:layout_weight="1"
+        android:gravity="center" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_revise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="수정"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="완료"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
 </LinearLayout>
