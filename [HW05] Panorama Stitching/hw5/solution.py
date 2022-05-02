@@ -21,11 +21,22 @@ def FindBestMatches(descriptors1, descriptors2, threshold):
     assert isinstance(descriptors1, np.ndarray)
     assert isinstance(descriptors2, np.ndarray)
     assert isinstance(threshold, float)
-    ## START
-    ## the following is just a placeholder to show you the output format
-    num = 5
-    matched_pairs = [[i, i] for i in range(num)]
-    ## END
+
+    matched_pairs = []
+    
+    for idx1, d1 in enumerate(descriptors1):
+        results = []
+        for idx2, d2 in enumerate(descriptors2):
+            matrix_dot = np.dot(d1, d2)
+            cos_theta = matrix_dot / np.linalg.norm(d1) / np.linalg.norm(d2)
+            theta = math.acos(cos_theta)
+            results.append([idx1, idx2, theta])
+
+        results = sorted(results, key=lambda x: x[2])
+
+        if results[0][2] / results[1][2] <= threshold:
+            matched_pairs.append(results[0][0:2])
+
     return matched_pairs
 
 
