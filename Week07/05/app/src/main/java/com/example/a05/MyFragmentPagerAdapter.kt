@@ -1,4 +1,4 @@
-package com.example.example05
+package com.example.a05
 
 class MyFragmentPagerAdapter {
 }
