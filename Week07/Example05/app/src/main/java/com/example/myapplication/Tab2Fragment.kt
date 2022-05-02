@@ -23,7 +23,7 @@ class Tab2Fragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        
+
         val datas = mutableListOf<String>()
         for(i in 1..20) {datas.add("Item $i")}
 
