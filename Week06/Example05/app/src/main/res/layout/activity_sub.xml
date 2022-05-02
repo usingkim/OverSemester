@@ -102,12 +102,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="⬛️ 성장 과정"/>
+                android:text="⬛️ 성장 과정"
+                />
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="성장 과정"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:id="@+id/et_grow"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -123,7 +125,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="학창 시절"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:id="@+id/et_student"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -139,6 +142,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="성격 장단점"
+                android:id="@+id/et_mbti"
                 android:gravity="center"/>
             <TextView
                 android:layout_width="match_parent"
@@ -155,6 +159,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="핵심 역량"
+                android:id="@+id/et_core"
                 android:gravity="center"/>
 
 

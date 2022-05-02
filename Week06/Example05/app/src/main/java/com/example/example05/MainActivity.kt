@@ -21,6 +21,10 @@ class MainActivity : AppCompatActivity() {
     lateinit var et_email: EditText
     lateinit var et_address: EditText
     lateinit var btn_submit: Button
+    var et_core: String? = null
+    var et_mbti: String? = null
+    var et_student: String? = null
+    var et_grow: String? = null
     var GALLERY = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         et_email = findViewById(R.id.et_email)
         et_address = findViewById(R.id.et_address)
         btn_submit = findViewById(R.id.btn_submit)
+
 
         btn_submit.setOnClickListener {
             val k_name : String = et_k_name.text.toString()
@@ -50,6 +55,11 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("email", email)
             intent.putExtra("address", address)
             intent.putExtra("image", image)
+
+            intent.putExtra("et_core", et_core)
+            intent.putExtra("et_mbti", et_mbti)
+            intent.putExtra("et_student", et_student)
+            intent.putExtra("et_grow", et_grow)
 
             startActivityForResult(intent, 2)
         }
@@ -83,6 +93,13 @@ class MainActivity : AppCompatActivity() {
                     } catch (e: Exception){
                         e.printStackTrace()
                     }
+                }
+                12 ->{
+                    val intent = Intent(this, SubActivity::class.java)
+                    et_core = intent.getStringExtra("et_core")
+                    et_student = intent.getStringExtra("et_student")
+                    et_mbti = intent.getStringExtra("et_mbti")
+                    et_grow = intent.getStringExtra("et_grow")
                 }
 
             }
