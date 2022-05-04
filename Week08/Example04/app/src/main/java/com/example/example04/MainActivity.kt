@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
 
         var sum = 0L
         var isStop = true
+        var isStart = false
+        var isPause = false
 
         var mainScope = GlobalScope.launch(Dispatchers.Main){
             channel.consumeEach {
@@ -74,46 +76,52 @@ class MainActivity : AppCompatActivity() {
                 }
                 stopBtn.isClickable = true
                 isStop = false
+                isStart = true
             }
         }
         stopBtn.setOnClickListener {
-            isStop = true
+            if (isStart){
+                isStop = true
+                isStart = false
 
-            backgroundScope.cancel()
+                backgroundScope.cancel()
 
-            backgroundScope = CoroutineScope(Dispatchers.Default + Job())
-            backgroundScope.launch{
-                sum = 0
-                channel.send(sum.toInt())
-            }
-            stopBtn.isClickable = false
-        }
-
-        pauseBtn.setOnClickListener {
-            backgroundScope.cancel()
-            resumeBtn.isClickable = true
-            pauseBtn.isClickable = false
-        }
-
-        resumeBtn.setOnClickListener { // 이어서 실행
-            var t_time = binding.time.text
-            var hour = t_time.split(':')[0].toInt()
-            var min = t_time.split(':')[1].toInt()
-            var sec = t_time.split(':')[2].toInt()
-            sum = hour * 3600L + min * 60 + sec
-            backgroundScope.cancel()
-            backgroundScope = CoroutineScope(Dispatchers.Default + Job())
-            backgroundScope.launch{
-
-                for(i in 1..2_000_000_000){
-                    delay(delayTime)
-                    sum += 1
+                backgroundScope = CoroutineScope(Dispatchers.Default + Job())
+                backgroundScope.launch{
+                    sum = 0
                     channel.send(sum.toInt())
                 }
             }
-            resumeBtn.isClickable = false
-            pauseBtn.isClickable = true
 
+        }
+
+        pauseBtn.setOnClickListener {
+            if (isStart){
+                backgroundScope.cancel()
+                isPause = true
+            }
+        }
+
+        resumeBtn.setOnClickListener { // 이어서 실행
+            if (isStart && isPause) {
+                var t_time = binding.time.text
+                var hour = t_time.split(':')[0].toInt()
+                var min = t_time.split(':')[1].toInt()
+                var sec = t_time.split(':')[2].toInt()
+                sum = hour * 3600L + min * 60 + sec
+                backgroundScope.cancel()
+                backgroundScope = CoroutineScope(Dispatchers.Default + Job())
+                backgroundScope.launch {
+
+                    for (i in 1..2_000_000_000) {
+                        delay(delayTime)
+                        sum += 1
+                        channel.send(sum.toInt())
+                    }
+                }
+
+                isPause = false
+            }
         }
 
 
