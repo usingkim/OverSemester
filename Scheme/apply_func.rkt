@@ -12,3 +12,5 @@ vhello
 (define fhello (lambda () "Hello World"))
 (fhello)
 ;diffrent each other
+(define (ffhello) "Hello World") ; lambda () <remove this
+(ffhello)
