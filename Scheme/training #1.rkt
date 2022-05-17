@@ -34,3 +34,7 @@
 (* 4 (atan 1.0))
 ; 6. exp(2/3)
 (exp 2/3)
+; 7. power
+(expt 3 4)
+; 8. logarithm of 1000
+(log 1000)
