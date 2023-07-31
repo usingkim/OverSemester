@@ -1,0 +1,4 @@
+; input
+(define num (read))
+; output
+(write (+ num 1))
